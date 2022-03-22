@@ -16,3 +16,24 @@ repos:
       - id: check-json
       - id: check-symlinks
       - id: detect-private-key
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.25.0
+    hooks:
+      - id: yamllint
+        files: \.(yaml|yml)$
+        types: [file, yaml]
+        entry: yamllint --strict -c yamllint-config.yaml
+
+  - repo: https://github.com/os-climate/osc-trino-acl-dsl
+    rev: v0.2.5
+    hooks:
+      # manage rules.json files using a DSL for trino ACL
+      # this check enforces that rules.json is consistent with dsl file
+      # https://github.com/os-climate/osc-trino-acl-dsl/blob/main/.pre-commit-hooks.yaml
+      - id: trino-acl-dsl-check
+        files: |
+          (?x)^(.*/)?(
+            trino-acl-dsl\.yaml|
+            rules\.json
+          )$
